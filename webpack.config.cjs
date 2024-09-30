@@ -129,7 +129,7 @@ const webpackConfig = {
     cache: true,
     alias: {
       "@": path.resolve(__dirname, "src"),
-    }
+    },
   },
   optimization: {
     splitChunks: {
