@@ -7,6 +7,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const LightningCSS = require("lightningcss");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
+const TerserPlugin = require("terser-webpack-plugin");
 const { LightningCssMinifyPlugin } = require("lightningcss-loader");
 const isDevelopment = process.env.NODE_ENV !== "production";
 const isAnalyze = !!process.env.ANALYZE;
@@ -37,6 +38,24 @@ const webpackConfig = {
   plugins: [
     !isDevelopment && new WebpackBar(),
     isDevelopment && new ReactRefreshWebpackPlugin(),
+    !isDevelopment &&
+      new TerserPlugin({
+        minify: TerserPlugin.swcMinify,
+        terserOptions: {
+          compress: {
+            ecma: 5,
+            comparisons: false,
+            inline: 2,
+          },
+          mangle: { safari10: true },
+          format: {
+            ecma: 2015,
+            safari10: true,
+            comments: false,
+            ascii_only: true,
+          },
+        },
+      }),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
       filename: isDevelopment ? "[name].css" : "[contenthash].css",
