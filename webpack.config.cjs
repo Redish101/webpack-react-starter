@@ -127,6 +127,9 @@ const webpackConfig = {
   resolve: {
     extensions: [".ts", ".tsx", ".jsx", ".mjs", ".cjs", ".js", ".json"],
     cache: true,
+    alias: {
+      "@": path.resolve(__dirname, "src"),
+    }
   },
   optimization: {
     splitChunks: {
