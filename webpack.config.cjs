@@ -1,6 +1,5 @@
 const WebpackBar = require("webpackbar");
 const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
-const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const BundleAnalyzerPlugin =
   require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
@@ -8,7 +7,6 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const LightningCSS = require("lightningcss");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
-const TerserPlugin = require("terser-webpack-plugin");
 const { LightningCssMinifyPlugin } = require("lightningcss-loader");
 const isDevelopment = process.env.NODE_ENV !== "production";
 const isAnalyze = !!process.env.ANALYZE;
@@ -43,24 +41,6 @@ const webpackConfig = {
     new MiniCssExtractPlugin({
       filename: isDevelopment ? "[name].css" : "[contenthash].css",
     }),
-    !isDevelopment &&
-      new TerserPlugin({
-        minify: TerserPlugin.swcMinify,
-        terserOptions: {
-          compress: {
-            ecma: 5,
-            comparisons: false,
-            inline: 2,
-          },
-          mangle: { safari10: true },
-          format: {
-            ecma: 2015,
-            safari10: true,
-            comments: false,
-            ascii_only: true,
-          },
-        },
-      }),
     !isDevelopment && new LightningCssMinifyPlugin(),
     isAnalyze &&
       new BundleAnalyzerPlugin({
@@ -126,11 +106,6 @@ const webpackConfig = {
     ],
   },
   resolve: {
-    plugins: [
-      new TsconfigPathsPlugin({
-        extensions: [".ts", ".tsx", ".jsx", ".mjs", ".cjs", ".js", ".json"],
-      }),
-    ],
     extensions: [".ts", ".tsx", ".jsx", ".mjs", ".cjs", ".js", ".json"],
     cache: true,
   },
